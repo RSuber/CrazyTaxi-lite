@@ -1,35 +1,24 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var PlayerModel = require('./model/playermodel');
-var DirectionModel = require('./model/directionmodel');
-var DirectionView = require('./view/directionview');
-var PlayerView = require('./view/playerview');
+var MyRouter = require('./router');
 
 window.addEventListener('load', function () {
   console.log('I am functional');
-
-  var vmodel = new PlayerModel();
-
-  var vdirection = new DirectionModel();
-
-  var player = new PlayerView({
-    model: vmodel,
-    el: document.getElementById('player-view')
-  });
-
-  var direction = new DirectionView({
-    model: vdirection,
-    el: document.getElementById('direction-view')
-  });
+  var GameRouter = new MyRouter();
+  Backbone.history.start();
 });
-},{"./model/directionmodel":2,"./model/playermodel":3,"./view/directionview":4,"./view/playerview":5}],2:[function(require,module,exports){
+},{"./router":3}],2:[function(require,module,exports){
 module.exports = Backbone.Model.extend({
   defaults:{
     xvalue: 0,
     yvalue: 0,
+    username: '',
+    energy:0
   },
-
+  start: function(input) {
+    this.set('username', input);
+  },
   up: function() {
     if (this.get('yvalue') < 10) {
     this.set('yvalue', this.get('yvalue') + 1);
@@ -57,18 +46,46 @@ module.exports = Backbone.Model.extend({
 });
 
 },{}],3:[function(require,module,exports){
-module.exports = Backbone.Model.extend({
 
-  defaults: {
-    username: '',
+let DirectionModel =require('./model/directionmodel');
+let DirectionView = require('./view/directionview');
+let PlayerView = require('./view/playerview');
+
+module.exports = Backbone.Router.extend({
+  initialize: function(){
+    let vdirection = new DirectionModel();
+
+    this.player = new PlayerView({
+      model: vdirection,
+      el: document.getElementById('player-view'),
+    });
+
+    this.direction = new DirectionView({
+      model: vdirection,
+      el: document.getElementById('direction-view')
+    })
   },
-  //start
-  start: function(input) {
-    this.set('username', input);
-  }
-});
+  routes: {
+    'MainGame' :'mainGame',
+    'restart' : 'restart',
+    '' : 'restart',
+  },
+mainGame: function(){
+  console.log('hello')
+  this.player.el.classList.add('hidden');
+  this.direction.el.classList.remove('hidden')
+},
+restart: function(){
+  console.log('hello')
+  this.direction.el.classList.add('hidden')
+  this.player.el.classList.remove('hidden')
+}
 
-},{}],4:[function(require,module,exports){
+})
+
+},{"./model/directionmodel":2,"./view/directionview":4,"./view/playerview":5}],4:[function(require,module,exports){
+
+
 module.exports = Backbone.View.extend({
 
     initialize: function () {
@@ -121,7 +138,6 @@ module.exports = Backbone.View.extend({
     this.model.on('change', this.render, this);
   },
 
-
   events: {
     //event name selector : function to call
     'click #start' : 'clickStart',
@@ -136,7 +152,7 @@ module.exports = Backbone.View.extend({
   render: function() {
       let name = this.model.get("username");
       let view = document.getElementById('ul');
-      view.innerHtml = name
+      view.innerHTML = name
   },
 
 

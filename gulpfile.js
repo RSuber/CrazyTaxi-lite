@@ -8,11 +8,12 @@ const browserify = require('gulp-browserify')
 gulp.task('sass', () => {
 // return gulp.src('./styles.scss')
     //  .pipe(sass())
-    return sass('./main.css')
-     .pipe(uglifycss({
-      "maxLineLen": 80,
-      "uglyComments": true
-    }))
+    // return sass('./main.css')
+    return gulp.src('./main.css')
+    //  .pipe(uglifycss({
+    //   "maxLineLen": 80,
+    //   "uglyComments": true
+    // }))
     .pipe(gulp.dest('./public'));
 })
 
