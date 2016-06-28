@@ -51,4 +51,8 @@ gulp.task('browserify', function() {
 		}))
 		.pipe(gulp.dest('./public'))
 });
-gulp.task('default', ['html', 'sass', 'webserver', 'babel','browserify']);
+gulp.task('watch',function(){
+  gulp.watch('./app.js', ['js'])
+  gulp.watch('./index.html',['html'])
+})
+gulp.task('default', ['html', 'sass', 'webserver',"js"]);

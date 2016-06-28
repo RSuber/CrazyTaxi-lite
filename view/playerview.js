@@ -12,15 +12,14 @@ module.exports = Backbone.View.extend({
 
   clickStart: function(){
     let input = document.getElementById('input');
-    console.log(input.value)
     this.model.start(input.value);
-
+    console.log(input.value)
   },
 
   render: function() {
-      let input = document.getElementById('input');
-      input.style.background = "lightblue";
-      input.style.color = "white";
+      let name = this.model.get("username");
+      let view = document.getElementById('ul');
+      view.innerHtml = name
   },
 
 

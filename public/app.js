@@ -1,22 +1,22 @@
-var DirectionModel = require('./model/directionmodel');
-var PlayerModel = require('./model/playermodel');
-var DirectionView = require('./view/directionview');
-var PlayerView = require('./view/playerview');
+var PlayerModel = require('./model/player');
+var DirectionModel = require('./model/direction');
+var DirectionView = require('./view/direction');
+var PlayerView = require('./view/player');
 
-window.addEventListener('load', function(){
+window.addEventListener('load', function () {
+  console.log('I am functional');
 
-  //Models
-  let dmodel = new DirectionModel();
-  let pmodel = new PlayerModel();
+  let vmodel = new Player();
 
-  //Views
+  let vdirection = new Direction();
+
   let player = new PlayerView({
-    model: pmodel,
-    el: document.getElementById('player-view'),
+    model: vmodel,
+    el: document.getElementByID('player-view')
   });
 
   let direction = new DirectionView({
-    model: dmodel,
-    el: document.getElementById('direction-view')
+    model: vdirection,
+    el: document.getElementByID('direction-view')
   });
 });
