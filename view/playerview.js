@@ -4,7 +4,6 @@ module.exports = Backbone.View.extend({
     this.model.on('change', this.render, this);
   },
 
-
   events: {
     //event name selector : function to call
     'click #start' : 'clickStart',
@@ -19,7 +18,7 @@ module.exports = Backbone.View.extend({
   render: function() {
       let name = this.model.get("username");
       let view = document.getElementById('ul');
-      view.innerHtml = name
+      view.innerHTML = name
   },
 
 

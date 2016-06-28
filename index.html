@@ -4,35 +4,29 @@
     <meta charset="utf-8">
     <title>Game Using Backbone framework</title>
     <link rel="normalize" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/4.1.1/normalize.css">
+    <link rel="stylesheet" href="main.css">
   </head>
   <body>
     <section id="player-view">
        <div id="player-name">
         <input id="input" value="Player Name" />
       </div>
-       <button id="start">Start</button>
+       <button id="start" onclick="location.href = '#MainGame'">Start</button>
      </section>
-
-
      <section id="direction-view">
-       <div id="x">0</div>
-       <div id="y">0</div>
+       <ul id="ul"></ul>
        <button id="up">up</button>
        <div id="yAxis">
          -
        </div>
        <button id="down">down</button>
        <div id="yAxis">
-         -
        </div>
        <button id="left">left</button>
        <div id="xAxis">
          -
        </div>
        <button id="right">right</button>
-       <div id="xAxis">
-         -
-       </div>
   </section>
     <script src="/vendor/underscore-min.js"></script>
 		<script src="/vendor/jquery.js"></script>

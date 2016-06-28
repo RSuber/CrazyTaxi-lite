@@ -2,8 +2,12 @@ module.exports = Backbone.Model.extend({
   defaults:{
     xvalue: 0,
     yvalue: 0,
+    username: '',
+    energy:0
   },
-
+  start: function(input) {
+    this.set('username', input);
+  },
   up: function() {
     if (this.get('yvalue') < 10) {
     this.set('yvalue', this.get('yvalue') + 1);

@@ -8,7 +8,7 @@ const browserify = require('gulp-browserify')
 gulp.task('sass', () => {
 // return gulp.src('./styles.scss')
     //  .pipe(sass())
-    return sass('./styles.scss')
+    return sass('./main.css')
      .pipe(uglifycss({
       "maxLineLen": 80,
       "uglyComments": true
@@ -55,4 +55,4 @@ gulp.task('watch',function(){
   gulp.watch('./app.js', ['js'])
   gulp.watch('./index.html',['html'])
 })
-gulp.task('default', ['html', 'sass', 'webserver',"js"]);
+gulp.task('default', ['html', 'sass', 'webserver',"js",]);
