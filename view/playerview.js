@@ -7,12 +7,19 @@ module.exports = Backbone.View.extend({
   events: {
     //event name selector : function to call
     'click #start' : 'clickStart',
+    'click #input' : 'clickInput',
   },
 
   clickStart: function(){
     let input = document.getElementById('input');
     this.model.start(input.value);
-    console.log(input.value)
+    console.log(input.value);
+  },
+  clickInput: function(){
+    let input = document.getElementById('input')
+    input.addEventListener('click',function(){
+      input.value = ""
+    })
   },
 
   render: function() {

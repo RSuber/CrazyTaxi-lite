@@ -4,16 +4,31 @@
 body{
   display:inline-block;
   width: 100%;
-  background-image:url('/AESTHETIC.jpg')
+  background-image:url('AESTHETIC.jpg');
+}
+canvas{
+  background:hotpink;
 }
 ul{
   margin:auto;
   margin-left:26%;
   FONT-SIZE:4em;
 }
+input{
+  width: 95%;
+  font-size: 3em;
+  margin-top: 23%;
+  margin-left: 3%;
+}
+button{
+  margin-left: 3%;
+    padding: 1%;
+    margin-top: 1%;
+    background-color: yellow;
+}
 #up{
   display:inline-block;
-  margin-left:35%;
+  margin-left: 37%;
 }
 #down{
   display:inline-block;
@@ -33,4 +48,10 @@ ul{
 #canvas{
   display:inherit;
   width:100%;
+}
+#start{
+  margin-left: 34%;
+    padding-left: 8%;
+    padding-right: 8%;
+    font-size: 1em;
 }
