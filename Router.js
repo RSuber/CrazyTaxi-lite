@@ -20,6 +20,7 @@ module.exports = Backbone.Router.extend({
   routes: {
     'MainGame' :'mainGame',
     'restart' : 'restart',
+    'killscreen':'killscreen',
     '' : 'restart',
   },
 mainGame: function(){
@@ -31,6 +32,10 @@ restart: function(){
   console.log('hello')
   this.direction.el.classList.add('hidden')
   this.player.el.classList.remove('hidden')
+},
+killscreen: function(){
+  this.direction.el.classList.add('hidden');
+  this.killscreen.el.classList.remove('display:none');
 }
 
 })

@@ -19,13 +19,11 @@ module.exports = Backbone.Model.extend({
 
  //start
  start: function(input) {
-   console.log("hi")
+   this.set('username',input);
    if (this.get('size') === ('big')){
      this.set('energy',150);
-     this.set('username', input);
    }
   else if(this.get('size')===('small')){
-    this.set('username',input);
   }
   console.log(this.get('energy'));
  },
@@ -35,12 +33,15 @@ module.exports = Backbone.Model.extend({
   if (this.get('yvalue') < 10 && this.get('size')==='big') {
   this.set('yvalue', this.get('yvalue') + 1);
   this.set('energy', this.get('energy')- 5);
+  this.consumeEnergy();
   console.log(this.get('energy'))
   }
   else if (this.get('yvalue') < 10 && this.get('size') === 'small'){
   this.set('yvalue', this.get('yvalue') + 2);
   this.set('energy', this.get('energy') - 10);
-  }
+  this.consumeEnergy();
+  console.log(this.get('energy'))
+}
 },
 
 
@@ -48,10 +49,14 @@ down: function() {
   if (this.get('yvalue') > - 10 && this.get('size')==='big') {
   this.set('yvalue', this.get('yvalue') - 1);
   this.set('energy', this.get('energy') - 5);
+  this.consumeEnergy();
+  console.log(this.get('energy'))
   }
   else if (this.get('yvalue') > - 10 && this.get('size') === 'small'){
   this.set('yvalue', this.get('yvalue') - 2);
   this.set('energy', this.get('energy') - 10);
+  this.consumeEnergy();
+  console.log(this.get('energy'))
   }
 },
 
@@ -60,10 +65,14 @@ left: function() {
   if (this.get('xvalue') > - 10 && this.get('size')==='big') {
   this.set('xvalue', this.get('xvalue') - 1);
   this.set('energy', this.get('energy') - 5);
+  this.consumeEnergy();
+  console.log(this.get('energy'))
   }
   else if (this.get('xvalue') > - 10 && this.get('size') === 'small'){
   this.set('xvalue', this.get('xvalue') - 2);
   this.set('energy', this.get('energy') - 10);
+  this.consumeEnergy();
+  console.log(this.get('energy'))
   }
 },
 
@@ -72,13 +81,23 @@ right: function() {
   if (this.get('xvalue') < 10 && this.get('size')==='big') {
   this.set('xvalue', this.get('xvalue') + 1);
   this.set('energy', this.get('energy') - 5);
+  this.consumeEnergy();
   }
   else if (this.get('xvalue') < 10 && this.get('size') === 'small'){
   this.set('xvalue', this.get('xvalue') + 2);
   this.set('energy', this.get('energy') - 10);
+  this.consumeEnergy();
+  console.log(this.get('energy'))
   }
 },
+consumeEnergy: function() {
+  if(this.get('energy') <= 0){
+  console.log('you Dead')
+  location.href = 'killscreen';
 
+}
+
+}
 
 });
 
@@ -105,6 +124,7 @@ module.exports = Backbone.Router.extend({
   routes: {
     'MainGame' :'mainGame',
     'restart' : 'restart',
+    'killscreen':'killscreen',
     '' : 'restart',
   },
 mainGame: function(){
@@ -116,6 +136,10 @@ restart: function(){
   console.log('hello')
   this.direction.el.classList.add('hidden')
   this.player.el.classList.remove('hidden')
+},
+killscreen: function(){
+  this.direction.el.classList.add('hidden');
+  this.killscreen.el.classList.remove('display:none');
 }
 
 })
