@@ -18,7 +18,7 @@ module.exports = Backbone.View.extend({
   },
   ChooseSmall: function(){
     let Size = this.model.set('size', "small")
-      console.log(Size)
+      console.log(this.model.get('size'));
   },
   clickStart: function(){
     let input = document.getElementById('input');
