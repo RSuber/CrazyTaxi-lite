@@ -8,12 +8,22 @@ module.exports = Backbone.View.extend({
     //event name selector : function to call
     'click #start' : 'clickStart',
     'click #input' : 'clickInput',
+    'click #big'   : 'ChooseBig',
+    'click #small' : 'ChooseSmall'
   },
 
+  ChooseBig: function (){
+    let Size = this.model.set('size','big')
+    console.log(this.model.get('size'));
+  },
+  ChooseSmall: function(){
+    let Size = this.model.set('size', "small")
+      console.log(Size)
+  },
   clickStart: function(){
     let input = document.getElementById('input');
     this.model.start(input.value);
-    console.log(input.value);
+    console.log(this.model.get('size'));
   },
   clickInput: function(){
     let input = document.getElementById('input')
@@ -26,6 +36,7 @@ module.exports = Backbone.View.extend({
       let name = this.model.get("username");
       let view = document.getElementById('ul');
       view.innerHTML = name
+
   },
 
 
