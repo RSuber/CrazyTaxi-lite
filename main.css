@@ -1,3 +1,36 @@
 .hidden{
   display: none;
 }
+body{
+  display:inline-block;
+  width: 100%;
+  background-image:url('/AESTHETIC.jpg')
+}
+ul{
+  margin:auto;
+  margin-left:26%;
+  FONT-SIZE:4em;
+}
+#up{
+  display:inline-block;
+  margin-left:35%;
+}
+#down{
+  display:inline-block;
+}
+#left{
+  display:inline-block;
+}
+#right{
+  display:inline-block;
+}
+#xAxis{
+  display:inline-block;
+}
+#yAxis{
+  display:inline-block;
+}
+#canvas{
+  display:inherit;
+  width:100%;
+}

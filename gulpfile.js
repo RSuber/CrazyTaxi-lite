@@ -36,6 +36,10 @@ gulp.task('html', function () {
     return gulp.src('./index.html')
         .pipe(gulp.dest('./public'));
 });
+gulp.task('jpg',function(){
+  return gulp.src('./AESTHETIC.jpg')
+  .pipe(gulp.dest('./public'));
+})
 gulp.task('js', function(){
  gulp.src('./app.js')
   .pipe(babel({
