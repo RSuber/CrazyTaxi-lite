@@ -9,14 +9,29 @@ window.addEventListener('load', function () {
   Backbone.history.start();
 });
 },{"./router":5}],2:[function(require,module,exports){
+let UserModel = require('./user');
+module.exports = Backbone.Collection.extend({
+  url:'http://grid.queencityiron.com/api/highscore',
+  model:UserModel,
+})
+
+},{"./user":4}],3:[function(require,module,exports){
 /// Gabe helped me get the data posting and getting
-let PlayerType = require('./user');
-let PlayerTypeCollection = require('./user.collection');
+let UserModel = require('./user');
+let UserCollection = require('./UserCollection');
 module.exports = Backbone.Model.extend({
   initialize: function (){
-this.playertype = new PlayerTypeCollection();
+    let self = this;
+    self.PlayerTypeCollection= new UserCollection();
+    self.PlayerTypeCollection.fetch({
+      success:function() {
+        console.log(self.PlayerTypeCollection);
+        self.PlayerTypeCollection.trigger('loaded')
+      }
+    });
+
   },
-url:"grid.queencityiron.com/api/players",
+url:"http://grid.queencityiron.com/api/highscore",
  defaults:{
    xvalue: 0,
    yvalue: 0,
@@ -26,7 +41,7 @@ url:"grid.queencityiron.com/api/players",
  },
 
  //start
- start: function(input) {
+ Start: function(input) {
    this.set('username',input);
    if (this.get('size') === ('big')){
      this.set('energy',150);
@@ -35,8 +50,21 @@ url:"grid.queencityiron.com/api/players",
   }
   console.log(this.get('energy'));
  },
-
-
+ sendScore: function() {
+   this.get('username')
+   this.get('name')
+   this.get('score')
+   this.save();
+   console.log('saving')
+ },
+ NewGame: function() {
+   this.trigger('Restart',this);
+  this.clear({
+     silent: true
+   },this);
+   this.set(this.defaults);
+   console.log(this.defaults)
+ },
  up: function() {
   if (this.get('yvalue') < 10 && this.get('size')==='big') {
   this.set('yvalue', this.get('yvalue') + 1);
@@ -102,22 +130,14 @@ consumeEnergy: function() {
   if(this.get('energy') <= 0){
   console.log('you Dead')
   this.trigger('death');
-  this.save();
 }
 },
 });
 
-},{"./user":4,"./user.collection":3}],3:[function(require,module,exports){
-let PlayerType = require('./user');
-module.exports = Backbone.Collection.extend({
-  url:'http://grid.queencityiron.com/api/players',
-  model:PlayerType,
-})
-
-},{"./user":4}],4:[function(require,module,exports){
+},{"./UserCollection":2,"./user":4}],4:[function(require,module,exports){
 module.exports = Backbone.Model.extend({
 
-url:'http://grid.queencityiron.com/api/players',
+url:'http://grid.queencityiron.com/api/highscore',
 defaults:{
   username: '',
   energy: 0,
@@ -128,6 +148,7 @@ defaults:{
 },{}],5:[function(require,module,exports){
 let DirectionModel =require('./model/directionmodel');
 let DirectionView = require('./view/directionview');
+let UserCollection = require('./model/UserCollection')
 let PlayerView = require('./view/playerview');
 let KillView = require('./view/killview')
 // let HighScoreCollection = require('./models/highscore.collection')
@@ -150,11 +171,17 @@ module.exports = Backbone.Router.extend({
     this.kill= new KillView({
       model: vdirection,
       el: document.getElementById('killview')
-    })
+    });
+    vdirection.on('Restart',function(model){
+      console.log(model);
+      this.navigate('',{
+        trigger:true
+      })
+    }, this)
   },
   routes: {
     'MainGame' :'mainGame',
-    'restart' : 'restart',
+    'Restart' : 'restart',
     'Killscreen':'killscreen',
     '' : 'restart',
   },
@@ -176,7 +203,7 @@ killscreen: function(){
 
 })
 
-},{"./model/directionmodel":2,"./view/directionview":6,"./view/killview":7,"./view/playerview":8}],6:[function(require,module,exports){
+},{"./model/UserCollection":2,"./model/directionmodel":3,"./view/directionview":6,"./view/killview":7,"./view/playerview":8}],6:[function(require,module,exports){
 module.exports = Backbone.View.extend({
 
     initialize: function () {
@@ -239,28 +266,32 @@ grid.appendChild(row)
 },{}],7:[function(require,module,exports){
 module.exports = Backbone.View.extend({
 
-    // initialize: function () {
-    //   this.model.on('load', this.render, this);
-    // },
-    events: {
-      'click #restart': 'GameRestart'
-    },
-  GameRestart: function(){
-
+     initialize: function () {
+       this.model.PlayerTypeCollection.on('loaded', this.render, this);
+   },
+  events: {
+    'click #restart': 'tryAgain',
   },
-  render: function(){
+  tryAgain: function(){
+    this.model.sendScore();
+    this.model.NewGame();
+    input = document.getElementById('input');
+    console.log(input)
+    input.value = ""
+  },
+   render: function(){
     let finalScore = this.el.querySelector('#scoreBoard')
-     finalScore.textContent = `You lost ${model.get('username')}
-     Final score: ${model.get('score')}`;
+     finalScore.textContent = `You lost douche!
+     Final score: ${this.model.get('score')}`;
      let renderScores = this.el.querySelector('#highScoreList')
      let self = this;
-     this.model.collectionOfHighScores.forEach(function(model) {
+     this.model.PlayerTypeCollection.forEach(function(model) {
        let scoreList = document.createElement('li')
        console.log(model);
          scoreList.textContent = `${model.get('playerType')} ${model.get('name')} ${model.get('score')} `;
              renderScores.appendChild(scoreList);
      })
-  }
+   }
 });
 
 },{}],8:[function(require,module,exports){
@@ -268,7 +299,6 @@ module.exports = Backbone.View.extend({
 
   initialize: function () {
     this.model.on('change', this.render, this);
-    this.model.playertype.on('gotTypes', this.render, this);
   },
 
   events: {
@@ -289,8 +319,8 @@ module.exports = Backbone.View.extend({
   },
   clickStart: function(){
     let input = document.getElementById('input');
-    this.model.start(input.value);
-    console.log(this.model.get('size'));
+    this.model.Start(input.value);
+    console.log(this.model.get('username'));
   },
   clickInput: function(){
     let input = document.getElementById('input')

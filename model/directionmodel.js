@@ -1,11 +1,19 @@
 /// Gabe helped me get the data posting and getting
-let PlayerType = require('./user');
-let PlayerTypeCollection = require('./user.collection');
+let UserModel = require('./user');
+let UserCollection = require('./UserCollection');
 module.exports = Backbone.Model.extend({
   initialize: function (){
-this.playertype = new PlayerTypeCollection();
+    let self = this;
+    self.PlayerTypeCollection= new UserCollection();
+    self.PlayerTypeCollection.fetch({
+      success:function() {
+        console.log(self.PlayerTypeCollection);
+        self.PlayerTypeCollection.trigger('loaded')
+      }
+    });
+
   },
-url:"grid.queencityiron.com/api/players",
+url:"http://grid.queencityiron.com/api/highscore",
  defaults:{
    xvalue: 0,
    yvalue: 0,
@@ -15,7 +23,7 @@ url:"grid.queencityiron.com/api/players",
  },
 
  //start
- start: function(input) {
+ Start: function(input) {
    this.set('username',input);
    if (this.get('size') === ('big')){
      this.set('energy',150);
@@ -24,8 +32,21 @@ url:"grid.queencityiron.com/api/players",
   }
   console.log(this.get('energy'));
  },
-
-
+ sendScore: function() {
+   this.get('username')
+   this.get('name')
+   this.get('score')
+   this.save();
+   console.log('saving')
+ },
+ NewGame: function() {
+   this.trigger('Restart',this);
+  this.clear({
+     silent: true
+   },this);
+   this.set(this.defaults);
+   console.log(this.defaults)
+ },
  up: function() {
   if (this.get('yvalue') < 10 && this.get('size')==='big') {
   this.set('yvalue', this.get('yvalue') + 1);
@@ -91,7 +112,6 @@ consumeEnergy: function() {
   if(this.get('energy') <= 0){
   console.log('you Dead')
   this.trigger('death');
-  this.save();
 }
 },
 });

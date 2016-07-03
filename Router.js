@@ -1,5 +1,6 @@
 let DirectionModel =require('./model/directionmodel');
 let DirectionView = require('./view/directionview');
+let UserCollection = require('./model/UserCollection')
 let PlayerView = require('./view/playerview');
 let KillView = require('./view/killview')
 // let HighScoreCollection = require('./models/highscore.collection')
@@ -22,11 +23,17 @@ module.exports = Backbone.Router.extend({
     this.kill= new KillView({
       model: vdirection,
       el: document.getElementById('killview')
-    })
+    });
+    vdirection.on('Restart',function(model){
+      console.log(model);
+      this.navigate('',{
+        trigger:true
+      })
+    }, this)
   },
   routes: {
     'MainGame' :'mainGame',
-    'restart' : 'restart',
+    'Restart' : 'restart',
     'Killscreen':'killscreen',
     '' : 'restart',
   },

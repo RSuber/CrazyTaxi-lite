@@ -2,7 +2,6 @@ module.exports = Backbone.View.extend({
 
   initialize: function () {
     this.model.on('change', this.render, this);
-    this.model.playertype.on('gotTypes', this.render, this);
   },
 
   events: {
@@ -23,8 +22,8 @@ module.exports = Backbone.View.extend({
   },
   clickStart: function(){
     let input = document.getElementById('input');
-    this.model.start(input.value);
-    console.log(this.model.get('size'));
+    this.model.Start(input.value);
+    console.log(this.model.get('username'));
   },
   clickInput: function(){
     let input = document.getElementById('input')
