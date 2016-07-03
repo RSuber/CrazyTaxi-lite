@@ -1,4 +1,3 @@
-
 let MyRouter = require('./router');
 
 window.addEventListener('load', function(){

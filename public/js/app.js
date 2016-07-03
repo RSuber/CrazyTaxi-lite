@@ -8,13 +8,21 @@ window.addEventListener('load', function () {
   var GameRouter = new MyRouter();
   Backbone.history.start();
 });
-},{"./router":3}],2:[function(require,module,exports){
+},{"./router":5}],2:[function(require,module,exports){
+/// Gabe helped me get the data posting and getting
+let PlayerType = require('./user');
+let PlayerTypeCollection = require('./user.collection');
 module.exports = Backbone.Model.extend({
+  initialize: function (){
+this.playertype = new PlayerTypeCollection();
+  },
+url:"grid.queencityiron.com/api/players",
  defaults:{
    xvalue: 0,
    yvalue: 0,
    username: '',
    energy: 100,
+   score: Math.floor(Math.random() * 100),
  },
 
  //start
@@ -93,24 +101,43 @@ right: function() {
 consumeEnergy: function() {
   if(this.get('energy') <= 0){
   console.log('you Dead')
-  location.href = 'killscreen';
-
+  this.trigger('death');
+  this.save();
 }
-
-}
-
+},
 });
 
-},{}],3:[function(require,module,exports){
+},{"./user":4,"./user.collection":3}],3:[function(require,module,exports){
+let PlayerType = require('./user');
+module.exports = Backbone.Collection.extend({
+  url:'http://grid.queencityiron.com/api/players',
+  model:PlayerType,
+})
 
+},{"./user":4}],4:[function(require,module,exports){
+module.exports = Backbone.Model.extend({
+
+url:'http://grid.queencityiron.com/api/players',
+defaults:{
+  username: '',
+  energy: 0,
+  score: 0
+},
+})
+
+},{}],5:[function(require,module,exports){
 let DirectionModel =require('./model/directionmodel');
 let DirectionView = require('./view/directionview');
 let PlayerView = require('./view/playerview');
+let KillView = require('./view/killview')
+// let HighScoreCollection = require('./models/highscore.collection')
 
 module.exports = Backbone.Router.extend({
   initialize: function(){
     let vdirection = new DirectionModel();
-
+    vdirection.on('death', function(){
+      this.navigate('Killscreen',{trigger:true})
+    }, this);
     this.player = new PlayerView({
       model: vdirection,
       el: document.getElementById('player-view'),
@@ -119,12 +146,16 @@ module.exports = Backbone.Router.extend({
     this.direction = new DirectionView({
       model: vdirection,
       el: document.getElementById('direction-view')
+    });
+    this.kill= new KillView({
+      model: vdirection,
+      el: document.getElementById('killview')
     })
   },
   routes: {
     'MainGame' :'mainGame',
     'restart' : 'restart',
-    'killscreen':'killscreen',
+    'Killscreen':'killscreen',
     '' : 'restart',
   },
 mainGame: function(){
@@ -136,17 +167,16 @@ restart: function(){
   console.log('hello')
   this.direction.el.classList.add('hidden')
   this.player.el.classList.remove('hidden')
+  this.kill.el.classList.add('hidden')
 },
 killscreen: function(){
   this.direction.el.classList.add('hidden');
-  this.killscreen.el.classList.remove('display:none');
+  this.kill.el.classList.remove('hidden');
 }
 
 })
 
-},{"./model/directionmodel":2,"./view/directionview":4,"./view/playerview":5}],4:[function(require,module,exports){
-
-
+},{"./model/directionmodel":2,"./view/directionview":6,"./view/killview":7,"./view/playerview":8}],6:[function(require,module,exports){
 module.exports = Backbone.View.extend({
 
     initialize: function () {
@@ -177,26 +207,68 @@ module.exports = Backbone.View.extend({
   clickRight: function () {
     this.model.right();
   },
-
+  // Riggan and Geoff helped me with this one
+createGrid : function() {
+  let grid = this.el.querySelector('#Grid');
+  grid.innerHTML = '';
+  console.log('making grid');
+  let size = 10;
+  for (y=0; y<size; y++){
+    var row = document.createElement("div");
+    row.classList.add('row');
+for(x=0; x<size; x++){
+  var cell = document.createElement('div');
+  cell.classList.add('cell')
+  row.appendChild(cell)
+  if(this.model.get("xvalue") === y && this.model.get("yvalue")===x){
+    cell.setAttribute('id','player');
+  }
+}
+grid.appendChild(row)
+}
+},
   render: function () {
     let buttonRight = this.el.querySelector('#xAxis');
     buttonRight.textContent = this.model.get('xvalue');
-
-    let buttonLeft = this.el.querySelector('#xAxis');
-    buttonLeft.textContent = this.model.get('xvalue');
-
     let buttonUp = this.el.querySelector('#yAxis');
     buttonUp.textContent = this.model.get('yvalue');
-  }
-
-
+    this.createGrid();
+}
 });
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
+module.exports = Backbone.View.extend({
+
+    // initialize: function () {
+    //   this.model.on('load', this.render, this);
+    // },
+    events: {
+      'click #restart': 'GameRestart'
+    },
+  GameRestart: function(){
+
+  },
+  render: function(){
+    let finalScore = this.el.querySelector('#scoreBoard')
+     finalScore.textContent = `You lost ${model.get('username')}
+     Final score: ${model.get('score')}`;
+     let renderScores = this.el.querySelector('#highScoreList')
+     let self = this;
+     this.model.collectionOfHighScores.forEach(function(model) {
+       let scoreList = document.createElement('li')
+       console.log(model);
+         scoreList.textContent = `${model.get('playerType')} ${model.get('name')} ${model.get('score')} `;
+             renderScores.appendChild(scoreList);
+     })
+  }
+});
+
+},{}],8:[function(require,module,exports){
 module.exports = Backbone.View.extend({
 
   initialize: function () {
     this.model.on('change', this.render, this);
+    this.model.playertype.on('gotTypes', this.render, this);
   },
 
   events: {
@@ -231,10 +303,7 @@ module.exports = Backbone.View.extend({
       let name = this.model.get("username");
       let view = document.getElementById('ul');
       view.innerHTML = name
-
   },
-
-
 
 });
 

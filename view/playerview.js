@@ -2,6 +2,7 @@ module.exports = Backbone.View.extend({
 
   initialize: function () {
     this.model.on('change', this.render, this);
+    this.model.playertype.on('gotTypes', this.render, this);
   },
 
   events: {
@@ -36,9 +37,6 @@ module.exports = Backbone.View.extend({
       let name = this.model.get("username");
       let view = document.getElementById('ul');
       view.innerHTML = name
-
   },
-
-
 
 });

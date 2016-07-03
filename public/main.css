@@ -55,3 +55,27 @@ button{
 .hidden{
   display: none;
 }
+#Grid {
+  margin:0 auto;
+  text-align:center;
+  line-height:0;
+}
+.row {
+ width: 2em;
+ height: 2em;
+ margin: 0;
+ display: inline-block;
+ border: 1px solid white;
+
+}
+.cell {
+ width: 2em;
+ height: 2em;
+ margin: 0;
+ display: inline-block;
+ border: 1px solid white;
+
+}
+#player{
+  background-color:green;
+}

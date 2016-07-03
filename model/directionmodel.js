@@ -1,9 +1,17 @@
+/// Gabe helped me get the data posting and getting
+let PlayerType = require('./user');
+let PlayerTypeCollection = require('./user.collection');
 module.exports = Backbone.Model.extend({
+  initialize: function (){
+this.playertype = new PlayerTypeCollection();
+  },
+url:"grid.queencityiron.com/api/players",
  defaults:{
    xvalue: 0,
    yvalue: 0,
    username: '',
    energy: 100,
+   score: Math.floor(Math.random() * 100),
  },
 
  //start
@@ -82,10 +90,8 @@ right: function() {
 consumeEnergy: function() {
   if(this.get('energy') <= 0){
   console.log('you Dead')
-  location.href = 'killscreen';
-
+  this.trigger('death');
+  this.save();
 }
-
-}
-
+},
 });

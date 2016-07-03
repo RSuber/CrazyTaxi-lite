@@ -10,6 +10,7 @@
     <section id="player-view">
        <div id="player-name">
         <input id="input" value="ENTER YOUR NAME HERE AND PRESS START TO BEGIN" />
+        <div id="buttons"> </div>
       </div>
        <button id="start" onclick="location.href = '#MainGame'">Start</button>
        <button id="small"> Small </button>
@@ -17,20 +18,19 @@
      </section>
      <section id="direction-view">
        <ul id="ul"></ul>
-       <canvas id='canvas'></canvas>
-       <button id="up">up</button>
+       <div id='Grid'></div>
+       <button id="up">down</button>
        <div id="yAxis">
          -
        </div>
-       <button id="down">down</button>
+       <button id="down">up</button>
        <button id="left">left</button>
        <div id="xAxis">
          -
        </div>
        <button id="right">right</button>
   </section>
-  <section id="killscreen" style =display:none>YOU DIE!!!!
-      <button id="startAgain" onclick="location.href = '#killscreen'">Start Again!</scipt>
+  <section id="killview">YOU DIE!!!!
   </section>
     <script src="/vendor/underscore-min.js"></script>
 		<script src="/vendor/jquery.js"></script>
