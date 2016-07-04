@@ -25,7 +25,6 @@ module.exports = Backbone.Router.extend({
       el: document.getElementById('killview')
     });
     vdirection.on('Restart',function(model){
-      console.log(model);
       this.navigate('',{
         trigger:true
       })

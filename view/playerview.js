@@ -13,17 +13,17 @@ module.exports = Backbone.View.extend({
   },
 
   ChooseBig: function (){
-    let Size = this.model.set('size','big')
-    console.log(this.model.get('size'));
+    let Size = this.model.set('playerType','big')
+    console.log(this.model.get('playerType'));
   },
   ChooseSmall: function(){
-    let Size = this.model.set('size', "small")
-      console.log(this.model.get('size'));
+    let Size = this.model.set('playerType', 'small')
+      console.log(this.model.get('playerType'));
   },
   clickStart: function(){
     let input = document.getElementById('input');
     this.model.Start(input.value);
-    console.log(this.model.get('username'));
+    console.log(this.model.get('name'));
   },
   clickInput: function(){
     let input = document.getElementById('input')
@@ -33,7 +33,7 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-      let name = this.model.get("username");
+      let name = this.model.get("name");
       let view = document.getElementById('ul');
       view.innerHTML = name
   },
