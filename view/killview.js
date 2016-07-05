@@ -1,7 +1,7 @@
 module.exports = Backbone.View.extend({
 
      initialize: function () {
-       this.model.PlayerTypeCollection.on('loaded', this.render, this);
+       this.model.PlayerCollection.on('loaded', this.render, this);
    },
   events: {
     'click #restart': 'tryAgain',
@@ -19,9 +19,8 @@ module.exports = Backbone.View.extend({
      Final score: ${this.model.get('score')}`;
      let renderScores = this.el.querySelector('#highScoreList')
      let self = this;
-     this.model.PlayerTypeCollection.forEach(function(model) {
+     this.model.PlayerCollection.forEach(function(model) {
        let scoreList = document.createElement('li')
-       console.log(model);
          scoreList.textContent = `${model.get('playerType')} ${model.get('name')} ${model.get('score')} `;
              renderScores.appendChild(scoreList);
      })

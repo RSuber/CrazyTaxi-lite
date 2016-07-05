@@ -1,6 +1,7 @@
 let DirectionModel =require('./model/directionmodel');
 let DirectionView = require('./view/directionview');
 let UserCollection = require('./model/UserCollection')
+let PlayerTypeCollection = require("./model/PlayerTypeCollection")
 let PlayerView = require('./view/playerview');
 let KillView = require('./view/killview')
 // let HighScoreCollection = require('./models/highscore.collection')
@@ -42,6 +43,7 @@ mainGame: function(){
   this.direction.el.classList.remove('hidden')
 },
 restart: function(){
+  this.trigger('Start')
   console.log('hello')
   this.direction.el.classList.add('hidden')
   this.player.el.classList.remove('hidden')

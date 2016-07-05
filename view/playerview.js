@@ -2,24 +2,15 @@ module.exports = Backbone.View.extend({
 
   initialize: function () {
     this.model.on('change', this.render, this);
+    this.model.PlayerTypeCollection.on('start',this.render,this)
   },
 
   events: {
     //event name selector : function to call
     'click #start' : 'clickStart',
     'click #input' : 'clickInput',
-    'click #big'   : 'ChooseBig',
-    'click #small' : 'ChooseSmall'
   },
 
-  ChooseBig: function (){
-    let Size = this.model.set('playerType','big')
-    console.log(this.model.get('playerType'));
-  },
-  ChooseSmall: function(){
-    let Size = this.model.set('playerType', 'small')
-      console.log(this.model.get('playerType'));
-  },
   clickStart: function(){
     let input = document.getElementById('input');
     this.model.Start(input.value);
@@ -33,9 +24,17 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
+    console.log('bootymeat')
       let name = this.model.get("name");
       let view = document.getElementById('ul');
       view.innerHTML = name
+      this.model.PlayerTypeCollection.forEach(function(model){
+        let Buttons = document.getElementById('buttons');
+        let ButtonMaker= document.createElement('button');
+        $(ButtonMaker).html(model.get('name'));
+        $(ButtonMaker).
+        Buttons.appendChild(ButtonMaker);
+      })
   },
 
 });

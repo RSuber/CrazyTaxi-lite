@@ -8,26 +8,50 @@ window.addEventListener('load', function () {
   var GameRouter = new MyRouter();
   Backbone.history.start();
 });
-},{"./router":5}],2:[function(require,module,exports){
+},{"./router":7}],2:[function(require,module,exports){
+module.exports = Backbone.Model.extend({
+url:'http://grid.queencityiron.com/api/players',
+defaults:{
+  energyPerMove: 0,
+  name:'',
+  startingEnergy: 0,
+},
+})
+
+},{}],3:[function(require,module,exports){
+let PlayerCollection = require('./PlayerType');
+module.exports = Backbone.Collection.extend({
+  url:'http://grid.queencityiron.com/api/players',
+  model:PlayerCollection,
+})
+
+},{"./PlayerType":2}],4:[function(require,module,exports){
 let UserModel = require('./user');
 module.exports = Backbone.Collection.extend({
   url:'http://grid.queencityiron.com/api/highscore',
   model:UserModel,
 })
 
-},{"./user":4}],3:[function(require,module,exports){
+},{"./user":6}],5:[function(require,module,exports){
 /// Gabe helped me get the data posting and getting
 let UserModel = require('./user');
 let UserCollection = require('./UserCollection');
+let PlayerTypeCollection = require('./PlayerTypeCollection');
+let PlayerType = require('./PlayerType')
 module.exports = Backbone.Model.extend({
   initialize: function (){
     let self = this;
     this.UserModel = new UserModel()
-    console.log(self.UserModel)
-    self.PlayerTypeCollection= new UserCollection()
+    self.PlayerCollection= new UserCollection()
+    self.PlayerTypeCollection = new PlayerTypeCollection()
     self.PlayerTypeCollection.fetch({
       success:function() {
-        self.PlayerTypeCollection.trigger('loaded')
+          self.PlayerTypeCollection.trigger('start')
+      }
+    })
+    self.PlayerCollection.fetch({
+      success:function() {
+        self.PlayerCollection.trigger('loaded')
       }
     });
   },
@@ -37,26 +61,29 @@ url:"http://grid.queencityiron.com/api/highscore",
    yvalue: 4,
    name: '',
    playerType:'',
-   energy: 100,
-   score:0,
+   energyPerMovePerMove: 100,
+   startingenergyPerMove: 0,
+   startingEnergy:30,
+   username:'',
+   score:10,
  },
 
  //start
  Start: function(input) {
    this.set('name',input);
    if (this.get('playerType') === ('big')){
-     this.set('energy',150);
+     this.set('energyPerMove',150);
    }
   else if(this.get('playerType')===('small')){
   }
-  console.log(this.get('energy'));
+  console.log(this.get('energyPerMove'));
  },
  sendScore: function() {
    this.UserModel.set('name', this.get('name'))
-   this.UserModel.set('playerType', this.get('playerType'))
    this.UserModel.set('score', this.get('score'))
+   this.UserModel.set('playerType', this.get('playerType'))
+   console.log(this.UserModel);
    this.UserModel.save()
-   console.log(this.UserModel)
  },
  NewGame: function() {
    this.trigger('Restart',this);
@@ -65,18 +92,19 @@ url:"http://grid.queencityiron.com/api/highscore",
    },this);
    this.set(this.defaults);
  },
+
  up: function() {
   if (this.get('yvalue') < 9 && this.get('yvalue') >-1 && this.get('playerType')==='big') {
   this.set('yvalue', this.get('yvalue') + 1);
-  this.set('energy', this.get('energy')- 5);
-  this.consumeEnergy();
-  console.log(this.get('energy'))
+  this.set('energyPerMove', this.get('energyPerMove')- 5);
+  this.consumeenergyPerMove();
+  console.log(this.get('energyPerMove'))
   }
   else if (this.get('yvalue') < 9 && this.get('yvalue') >-1 && this.get('playerType') === 'small'){
   this.set('yvalue', this.get('yvalue') + 2);
-  this.set('energy', this.get('energy') - 10);
-  this.consumeEnergy();
-  console.log(this.get('energy'))
+  this.set('energyPerMove', this.get('energyPerMove') - 10);
+  this.consumeenergyPerMove();
+  console.log(this.get('energyPerMove'))
 }
 },
 
@@ -84,15 +112,15 @@ url:"http://grid.queencityiron.com/api/highscore",
 down: function() {
   if (this.get('yvalue') > - 9 && this.get('yvalue') >0 && this.get('playerType')==='big') {
   this.set('yvalue', this.get('yvalue') - 1);
-  this.set('energy', this.get('energy') - 5);
-  this.consumeEnergy();
-  console.log(this.get('energy'))
+  this.set('energyPerMove', this.get('energyPerMove') - 5);
+  this.consumeenergyPerMove();
+  console.log(this.get('energyPerMove'))
   }
   else if (this.get('yvalue') > - 9 && this.get('yvalue') >-1 && this.get('playerType') === 'small'){
   this.set('yvalue', this.get('yvalue') - 2);
-  this.set('energy', this.get('energy') - 10);
-  this.consumeEnergy();
-  console.log(this.get('energy'))
+  this.set('energyPerMove', this.get('energyPerMove') - 10);
+  this.consumeenergyPerMove();
+  console.log(this.get('energyPerMove'))
   }
 },
 
@@ -100,15 +128,15 @@ down: function() {
 left: function() {
   if (this.get('xvalue') > - 9 && this.get('xvalue') >0 && this.get('playerType')==='big') {
   this.set('xvalue', this.get('xvalue') - 1);
-  this.set('energy', this.get('energy') - 5);
-  this.consumeEnergy();
-  console.log(this.get('energy'))
+  this.set('energyPerMove', this.get('energyPerMove') - 5);
+  this.consumeenergyPerMove();
+  console.log(this.get('energyPerMove'))
   }
   else if (this.get('xvalue') > - 9 && this.get('xvalue') >-1&& this.get('playerType') === 'small'){
   this.set('xvalue', this.get('xvalue') - 2);
-  this.set('energy', this.get('energy') - 10);
-  this.consumeEnergy();
-  console.log(this.get('energy'))
+  this.set('energyPerMove', this.get('energyPerMove') - 10);
+  this.consumeenergyPerMove();
+  console.log(this.get('energyPerMove'))
   }
 },
 
@@ -116,25 +144,25 @@ left: function() {
 right: function() {
   if (this.get('xvalue') < 9 && this.get('xvalue') >-1 && this.get('playerType')==='big') {
   this.set('xvalue', this.get('xvalue') + 1);
-  this.set('energy', this.get('energy') - 5);
-  this.consumeEnergy();
+  this.set('energyPerMove', this.get('energyPerMove') - 5);
+  this.consumeenergyPerMove();
   }
   else if (this.get('xvalue') < 9 && this.get('xvalue') >-1 && this.get('playerType') === 'small'){
   this.set('xvalue', this.get('xvalue') + 2);
-  this.set('energy', this.get('energy') - 10);
-  this.consumeEnergy();
-  console.log(this.get('energy'))
+  this.set('energyPerMove', this.get('energyPerMove') - 10);
+  this.consumeenergyPerMove();
+  console.log(this.get('energyPerMove'))
   }
 },
-consumeEnergy: function() {
-  if(this.get('energy') <= 0){
+consumeenergyPerMove: function() {
+  if(this.get('energyPerMove') <= 0){
   console.log('you Dead')
   this.trigger('death');
 }
 },
 });
 
-},{"./UserCollection":2,"./user":4}],4:[function(require,module,exports){
+},{"./PlayerType":2,"./PlayerTypeCollection":3,"./UserCollection":4,"./user":6}],6:[function(require,module,exports){
 module.exports = Backbone.Model.extend({
 
 url:'http://grid.queencityiron.com/api/highscore',
@@ -145,10 +173,11 @@ defaults:{
 },
 })
 
-},{}],5:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 let DirectionModel =require('./model/directionmodel');
 let DirectionView = require('./view/directionview');
 let UserCollection = require('./model/UserCollection')
+let PlayerTypeCollection = require("./model/PlayerTypeCollection")
 let PlayerView = require('./view/playerview');
 let KillView = require('./view/killview')
 // let HighScoreCollection = require('./models/highscore.collection')
@@ -190,6 +219,7 @@ mainGame: function(){
   this.direction.el.classList.remove('hidden')
 },
 restart: function(){
+  this.trigger('Start')
   console.log('hello')
   this.direction.el.classList.add('hidden')
   this.player.el.classList.remove('hidden')
@@ -202,7 +232,7 @@ killscreen: function(){
 
 })
 
-},{"./model/UserCollection":2,"./model/directionmodel":3,"./view/directionview":6,"./view/killview":7,"./view/playerview":8}],6:[function(require,module,exports){
+},{"./model/PlayerTypeCollection":3,"./model/UserCollection":4,"./model/directionmodel":5,"./view/directionview":8,"./view/killview":9,"./view/playerview":10}],8:[function(require,module,exports){
 module.exports = Backbone.View.extend({
 
     initialize: function () {
@@ -262,11 +292,11 @@ grid.appendChild(row)
 }
 });
 
-},{}],7:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 module.exports = Backbone.View.extend({
 
      initialize: function () {
-       this.model.PlayerTypeCollection.on('loaded', this.render, this);
+       this.model.PlayerCollection.on('loaded', this.render, this);
    },
   events: {
     'click #restart': 'tryAgain',
@@ -284,38 +314,28 @@ module.exports = Backbone.View.extend({
      Final score: ${this.model.get('score')}`;
      let renderScores = this.el.querySelector('#highScoreList')
      let self = this;
-     this.model.PlayerTypeCollection.forEach(function(model) {
+     this.model.PlayerCollection.forEach(function(model) {
        let scoreList = document.createElement('li')
-       console.log(model);
          scoreList.textContent = `${model.get('playerType')} ${model.get('name')} ${model.get('score')} `;
              renderScores.appendChild(scoreList);
      })
    }
 });
 
-},{}],8:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 module.exports = Backbone.View.extend({
 
   initialize: function () {
     this.model.on('change', this.render, this);
+    this.model.PlayerTypeCollection.on('start',this.render,this)
   },
 
   events: {
     //event name selector : function to call
     'click #start' : 'clickStart',
     'click #input' : 'clickInput',
-    'click #big'   : 'ChooseBig',
-    'click #small' : 'ChooseSmall'
   },
 
-  ChooseBig: function (){
-    let Size = this.model.set('playerType','big')
-    console.log(this.model.get('playerType'));
-  },
-  ChooseSmall: function(){
-    let Size = this.model.set('playerType', 'small')
-      console.log(this.model.get('playerType'));
-  },
   clickStart: function(){
     let input = document.getElementById('input');
     this.model.Start(input.value);
@@ -329,9 +349,16 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
+    console.log('bootymeat')
       let name = this.model.get("name");
       let view = document.getElementById('ul');
       view.innerHTML = name
+      this.model.PlayerTypeCollection.forEach(function(model){
+        let Buttons = document.getElementById('buttons');
+        let ButtonMaker= document.createElement('button');
+        $(ButtonMaker).html(model.get('name'));
+        Buttons.appendChild(ButtonMaker);
+      })
   },
 
 });
