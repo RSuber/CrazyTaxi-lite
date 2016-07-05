@@ -123,7 +123,7 @@ scoring: function(x,y) {
   }
 },
 treasureGenerator: function() {
-   this.on('treasureGen')
+  //  this.on('treasureGen', this.model.treasureGenerator())
    this.set('xtreasure', Math.floor(Math.random() * 9) + 1)
    this.set('ytreasure',Math.floor(Math.random()* 9) + 1)
    this.set('score', this.get('score') + 5)

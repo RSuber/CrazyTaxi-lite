@@ -49,7 +49,7 @@ for(x=0; x<size; x++){
     cell.setAttribute('id','treasure');
   }
   else if (this.model.get('ytreasure') === this.model.get('yvalue') && this.model.get('xtreasure') === this.model.get('xvalue')){
-    this.trigger('treasureGen')
+    this.model.treasureGenerator()
   }
 }
 grid.appendChild(row)

@@ -158,7 +158,7 @@ scoring: function(x,y) {
   }
 },
 treasureGenerator: function() {
-   this.on('treasureGen')
+  //  this.on('treasureGen', this.model.treasureGenerator())
    this.set('xtreasure', Math.floor(Math.random() * 9) + 1)
    this.set('ytreasure',Math.floor(Math.random()* 9) + 1)
    this.set('score', this.get('score') + 5)
@@ -287,7 +287,7 @@ for(x=0; x<size; x++){
     cell.setAttribute('id','treasure');
   }
   else if (this.model.get('ytreasure') === this.model.get('yvalue') && this.model.get('xtreasure') === this.model.get('xvalue')){
-    this.trigger('treasureGen')
+    this.model.treasureGenerator()
   }
 }
 grid.appendChild(row)
