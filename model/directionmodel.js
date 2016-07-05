@@ -26,9 +26,8 @@ url:"http://grid.queencityiron.com/api/highscore",
    yvalue: 4,
    name: '',
    playerType:'',
-   energyPerMovePerMove: 100,
-   startingenergyPerMove: 0,
-   startingEnergy:30,
+   energyPerMove: 100,
+   startingEnergy: 0,
    username:'',
    score:10,
  },
@@ -36,12 +35,19 @@ url:"http://grid.queencityiron.com/api/highscore",
  //start
  Start: function(input) {
    this.set('name',input);
-   if (this.get('playerType') === ('big')){
-     this.set('energyPerMove',150);
-   }
-  else if(this.get('playerType')===('small')){
-  }
-  console.log(this.get('energyPerMove'));
+ },
+ ChooseCharacter: function(size){
+   this.PlayerTypeCollection.forEach(function(model){
+        if($(size).attr('id') === model.get('name')){
+          this.UserModel.set('name', model.get('name'))
+          this.UserModel.set('score', model.get('score'))
+          this.User
+        }
+      else{
+        console.log(model.get('name'))
+        console.log($(size).attr('id'))
+      }
+   })
  },
  sendScore: function() {
    this.UserModel.set('name', this.get('name'))

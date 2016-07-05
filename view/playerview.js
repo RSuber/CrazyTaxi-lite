@@ -9,6 +9,9 @@ module.exports = Backbone.View.extend({
     //event name selector : function to call
     'click #start' : 'clickStart',
     'click #input' : 'clickInput',
+    'click #Small' : 'clickSmall',
+    'click #Large' : 'clickLarge',
+    'click #Gargantuan' : 'clickGargantuan'
   },
 
   clickStart: function(){
@@ -22,6 +25,10 @@ module.exports = Backbone.View.extend({
       input.value = ""
     })
   },
+  clickSmall: function(){
+    let small = document.getElementById('Small')
+    this.model.ChooseCharacter(small)
+  },
 
   render: function() {
     console.log('bootymeat')
@@ -32,7 +39,7 @@ module.exports = Backbone.View.extend({
         let Buttons = document.getElementById('buttons');
         let ButtonMaker= document.createElement('button');
         $(ButtonMaker).html(model.get('name'));
-        $(ButtonMaker).
+        $(ButtonMaker).attr('id',model.get('name'))
         Buttons.appendChild(ButtonMaker);
       })
   },
