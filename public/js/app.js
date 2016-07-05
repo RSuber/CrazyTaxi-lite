@@ -156,10 +156,11 @@ scoring: function(x,y) {
     this.set('score', this.get('score') + 20)
   }
 },
-treasureGenerator: function(x,y) {
-   x = Math.floor(Math.random() * 9) + 1
-   y = Math.floor(Math.random()* 9) + 1
-   this.get('score', this.get('score') + 5)
+treasureGenerator: function() {
+   this.on('treasureGen')
+   this.set('xtreasure', Math.floor(Math.random() * 9) + 1)
+   this.set('ytreasure',Math.floor(Math.random()* 9) + 1)
+   this.set('score', this.get('score') + 5)
  }
 });
 
@@ -285,10 +286,7 @@ for(x=0; x<size; x++){
     cell.setAttribute('id','treasure');
   }
   else if (this.model.get('ytreasure') === this.model.get('yvalue') && this.model.get('xtreasure') === this.model.get('xvalue')){
-    console.log('HIMINAMEISLOGAN')
-    y =this.model.get('ytreasure')
-    x = this.model.get('xtreasure')
-    this.model.treasureGenerator(x,y)
+    this.trigger('treasureGen')
   }
 }
 grid.appendChild(row)

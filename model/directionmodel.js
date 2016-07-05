@@ -121,9 +121,10 @@ scoring: function(x,y) {
     this.set('score', this.get('score') + 20)
   }
 },
-treasureGenerator: function(x,y) {
-   x = Math.floor(Math.random() * 9) + 1
-   y = Math.floor(Math.random()* 9) + 1
-   this.get('score', this.get('score') + 5)
+treasureGenerator: function() {
+   this.on('treasureGen')
+   this.set('xtreasure', Math.floor(Math.random() * 9) + 1)
+   this.set('ytreasure',Math.floor(Math.random()* 9) + 1)
+   this.set('score', this.get('score') + 5)
  }
 });
