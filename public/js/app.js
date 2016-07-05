@@ -94,6 +94,7 @@ url:"http://grid.queencityiron.com/api/highscore",
    this.UserModel.set('playerType', this.get('playerType'))
    console.log(this.UserModel);
    this.UserModel.save()
+   console.log('saving')
  },
  NewGame: function() {
    this.trigger('Restart',this);
