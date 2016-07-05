@@ -1,7 +1,6 @@
 module.exports = Backbone.View.extend({
 
   initialize: function () {
-    this.model.on('change', this.render, this);
     this.model.PlayerTypeCollection.on('start',this.render,this)
   },
 
@@ -26,12 +25,19 @@ module.exports = Backbone.View.extend({
     })
   },
   clickSmall: function(){
-    let small = document.getElementById('Small')
-    this.model.ChooseCharacter(small)
+    let Small = document.getElementById('Small')
+    this.model.ChooseCharacter(Small)
+  },
+  clickLarge: function(){
+    let Large = document.getElementById('Large')
+    this.model.ChooseCharacter(Large)
+  },
+  clickGargantuan: function(){
+    let Gargantuan = document.getElementById('Gargantuan')
+    this.model.ChooseCharacter(Gargantuan)
   },
 
   render: function() {
-    console.log('bootymeat')
       let name = this.model.get("name");
       let view = document.getElementById('ul');
       view.innerHTML = name

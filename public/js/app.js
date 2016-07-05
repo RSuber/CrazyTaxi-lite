@@ -59,12 +59,14 @@ url:"http://grid.queencityiron.com/api/highscore",
  defaults:{
    xvalue: 4,
    yvalue: 4,
+   xtreasure:0,
+   ytreasure:0,
    name: '',
    playerType:'',
-   energyPerMove: 100,
+   energyPerMove: 0,
    startingEnergy: 0,
    username:'',
-   score:10,
+   score:0,
  },
 
  //start
@@ -72,15 +74,19 @@ url:"http://grid.queencityiron.com/api/highscore",
    this.set('name',input);
  },
  ChooseCharacter: function(size){
+    let User = this.UserModel
+    let defaults = this
    this.PlayerTypeCollection.forEach(function(model){
         if($(size).attr('id') === model.get('name')){
-          console.log('buttplugs')
+          defaults.set('energyPerMove', model.get('energyPerMove'))
+          defaults.set('playerType', model.get('name'))
+          defaults.set('startingEnergy', model.get('startingEnergy'))
         }
-      else{
+      else {
         console.log(model.get('name'))
         console.log($(size).attr('id'))
       }
-   })
+   });
  },
  sendScore: function() {
    this.UserModel.set('name', this.get('name'))
@@ -98,72 +104,63 @@ url:"http://grid.queencityiron.com/api/highscore",
  },
 
  up: function() {
-  if (this.get('yvalue') < 9 && this.get('yvalue') >-1 && this.get('playerType')==='big') {
+  if (this.get('yvalue') < 9 && this.get('yvalue') > -1 ) {
   this.set('yvalue', this.get('yvalue') + 1);
-  this.set('energyPerMove', this.get('energyPerMove')- 5);
-  this.consumeenergyPerMove();
-  console.log(this.get('energyPerMove'))
+  this.set('startingEnergy', this.get('startingEnergy')- this.get('energyPerMove'));
+  this.set('score', this.get('score') + 1)
+  this.consumeenergy();
+  console.log(this.get('startingEnergy'))
   }
-  else if (this.get('yvalue') < 9 && this.get('yvalue') >-1 && this.get('playerType') === 'small'){
-  this.set('yvalue', this.get('yvalue') + 2);
-  this.set('energyPerMove', this.get('energyPerMove') - 10);
-  this.consumeenergyPerMove();
-  console.log(this.get('energyPerMove'))
-}
 },
 
 
 down: function() {
-  if (this.get('yvalue') > - 9 && this.get('yvalue') >0 && this.get('playerType')==='big') {
+  if (this.get('yvalue') > - 9 && this.get('yvalue') >0 ) {
   this.set('yvalue', this.get('yvalue') - 1);
-  this.set('energyPerMove', this.get('energyPerMove') - 5);
-  this.consumeenergyPerMove();
-  console.log(this.get('energyPerMove'))
-  }
-  else if (this.get('yvalue') > - 9 && this.get('yvalue') >-1 && this.get('playerType') === 'small'){
-  this.set('yvalue', this.get('yvalue') - 2);
-  this.set('energyPerMove', this.get('energyPerMove') - 10);
-  this.consumeenergyPerMove();
-  console.log(this.get('energyPerMove'))
+  this.set('startingEnergy', this.get('startingEnergy') - this.get('energyPerMove'));
+  this.set('score', this.get('score') + 1)
+  this.consumeenergy();
+  console.log(this.get('startingEnergy'))
   }
 },
 
 
 left: function() {
-  if (this.get('xvalue') > - 9 && this.get('xvalue') >0 && this.get('playerType')==='big') {
+  if (this.get('xvalue') > - 9 && this.get('xvalue') >0 ){
   this.set('xvalue', this.get('xvalue') - 1);
-  this.set('energyPerMove', this.get('energyPerMove') - 5);
-  this.consumeenergyPerMove();
-  console.log(this.get('energyPerMove'))
-  }
-  else if (this.get('xvalue') > - 9 && this.get('xvalue') >-1&& this.get('playerType') === 'small'){
-  this.set('xvalue', this.get('xvalue') - 2);
-  this.set('energyPerMove', this.get('energyPerMove') - 10);
-  this.consumeenergyPerMove();
-  console.log(this.get('energyPerMove'))
+  this.set('startingEnergy', this.get('startingEnergy') - this.get('energyPerMove'));
+  this.set('score', this.get('score') + 1)
+  this.consumeenergy();
+  console.log(this.get('startingEnergy'))
   }
 },
 
 
 right: function() {
-  if (this.get('xvalue') < 9 && this.get('xvalue') >-1 && this.get('playerType')==='big') {
+  if (this.get('xvalue') < 9 && this.get('xvalue') >-1) {
   this.set('xvalue', this.get('xvalue') + 1);
-  this.set('energyPerMove', this.get('energyPerMove') - 5);
-  this.consumeenergyPerMove();
-  }
-  else if (this.get('xvalue') < 9 && this.get('xvalue') >-1 && this.get('playerType') === 'small'){
-  this.set('xvalue', this.get('xvalue') + 2);
-  this.set('energyPerMove', this.get('energyPerMove') - 10);
-  this.consumeenergyPerMove();
-  console.log(this.get('energyPerMove'))
+  this.set('startingEnergy', this.get('startingEnergy') - this.get('energyPerMove'));
+  this.set('score', this.get('score') + 1)
+  this.consumeenergy();
   }
 },
-consumeenergyPerMove: function() {
-  if(this.get('energyPerMove') <= 0){
+consumeenergy: function() {
+  if(this.get('startingEnergy') <= 0){
   console.log('you Dead')
   this.trigger('death');
-}
+}},
+scoring: function(x,y) {
+  xx = this.get('xvalue')
+  yy = this.get('yvalue')
+  if(xx === x && yy === y){
+    this.set('score', this.get('score') + 20)
+  }
 },
+treasureGenerator: function(x,y) {
+   x = Math.floor(Math.random() * 9) + 1
+   y = Math.floor(Math.random()* 9) + 1
+   this.get('score', this.get('score') + 5)
+ }
 });
 
 },{"./PlayerType":2,"./PlayerTypeCollection":3,"./UserCollection":4,"./user":6}],6:[function(require,module,exports){
@@ -267,9 +264,10 @@ module.exports = Backbone.View.extend({
   clickRight: function () {
     this.model.right();
   },
-  // Riggan and Geoff helped me with this one
+  // Riggan helped me with this one
 createGrid : function() {
   let grid = this.el.querySelector('#Grid');
+  let random = 1
   grid.innerHTML = '';
   console.log('making grid');
   let size = 10;
@@ -283,11 +281,21 @@ for(x=0; x<size; x++){
   if(this.model.get("xvalue") === y && this.model.get("yvalue")===x){
     cell.setAttribute('id','player');
   }
+  else if(y === this.model.get('ytreasure')  && x === this.model.get('xtreasure') ){
+    cell.setAttribute('id','treasure');
+  }
+  else if (this.model.get('ytreasure') === this.model.get('yvalue') && this.model.get('xtreasure') === this.model.get('xvalue')){
+    console.log('HIMINAMEISLOGAN')
+    y =this.model.get('ytreasure')
+    x = this.model.get('xtreasure')
+    this.model.treasureGenerator(x,y)
+  }
 }
 grid.appendChild(row)
 }
 },
   render: function () {
+    $('ul').html(`${this.model.get('name')}`)
     let buttonRight = this.el.querySelector('#xAxis');
     buttonRight.textContent = this.model.get('xvalue');
     let buttonUp = this.el.querySelector('#yAxis');
@@ -330,7 +338,6 @@ module.exports = Backbone.View.extend({
 module.exports = Backbone.View.extend({
 
   initialize: function () {
-    this.model.on('change', this.render, this);
     this.model.PlayerTypeCollection.on('start',this.render,this)
   },
 
@@ -355,12 +362,19 @@ module.exports = Backbone.View.extend({
     })
   },
   clickSmall: function(){
-    let small = document.getElementById('Small')
-    this.model.ChooseCharacter(small)
+    let Small = document.getElementById('Small')
+    this.model.ChooseCharacter(Small)
+  },
+  clickLarge: function(){
+    let Large = document.getElementById('Large')
+    this.model.ChooseCharacter(Large)
+  },
+  clickGargantuan: function(){
+    let Gargantuan = document.getElementById('Gargantuan')
+    this.model.ChooseCharacter(Gargantuan)
   },
 
   render: function() {
-    console.log('bootymeat')
       let name = this.model.get("name");
       let view = document.getElementById('ul');
       view.innerHTML = name

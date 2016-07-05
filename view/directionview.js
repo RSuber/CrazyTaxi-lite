@@ -28,9 +28,10 @@ module.exports = Backbone.View.extend({
   clickRight: function () {
     this.model.right();
   },
-  // Riggan and Geoff helped me with this one
+  // Riggan helped me with this one
 createGrid : function() {
   let grid = this.el.querySelector('#Grid');
+  let random = 1
   grid.innerHTML = '';
   console.log('making grid');
   let size = 10;
@@ -44,11 +45,21 @@ for(x=0; x<size; x++){
   if(this.model.get("xvalue") === y && this.model.get("yvalue")===x){
     cell.setAttribute('id','player');
   }
+  else if(y === this.model.get('ytreasure')  && x === this.model.get('xtreasure') ){
+    cell.setAttribute('id','treasure');
+  }
+  else if (this.model.get('ytreasure') === this.model.get('yvalue') && this.model.get('xtreasure') === this.model.get('xvalue')){
+    console.log('HIMINAMEISLOGAN')
+    y =this.model.get('ytreasure')
+    x = this.model.get('xtreasure')
+    this.model.treasureGenerator(x,y)
+  }
 }
 grid.appendChild(row)
 }
 },
   render: function () {
+    $('ul').html(`${this.model.get('name')}`)
     let buttonRight = this.el.querySelector('#xAxis');
     buttonRight.textContent = this.model.get('xvalue');
     let buttonUp = this.el.querySelector('#yAxis');
